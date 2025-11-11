@@ -1,21 +1,20 @@
 package co.edu.univalle.Auth;
 
-import co.edu.univalle.Models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterRequest {
-    String username;
-    String password;
-    String firstname;
-    String lastname;
-    String country;
-    String email;
-    Role role;
+    private String firstname;
+    private String lastname;
+    private String username;
+    private String email;
+    private String code;
+    private String password;
+    private String confirmPassword;
 }
