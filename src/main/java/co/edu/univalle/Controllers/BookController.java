@@ -36,7 +36,10 @@ public class BookController {
         bookService.deleteBook(id);
 
         return ResponseEntity.ok("Libro eliminado");
+
     }
-
-
+    @GetMapping("/search")
+    public List<BookModel> searchBooks(@RequestParam("query") String query) {
+        return bookService.searchBooks(query);
+    }
 }
