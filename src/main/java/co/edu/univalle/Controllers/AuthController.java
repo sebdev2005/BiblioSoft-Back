@@ -50,6 +50,16 @@ public class AuthController {
             return ResponseEntity.status(400).body("Contraseña anterior incorrecta");
         }
 
+        if (oldPassword.equals(newPassword)) {
+            return ResponseEntity.status(400).body("La nueva contraseña no puede ser igual a la anterior");
+        }
+
+        String passwordRegex = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*.,;:?¡¿_+\\-=]).{8,30}$";
+        if (!newPassword.matches(passwordRegex)) {
+            return ResponseEntity.status(400).body("La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, \" +\n" +
+                    "                \"una minúscula, un número y un carácter especial");
+        }
+
         user.setPassword(passwordEncoder.encode((newPassword)));
         userRepository.save(user);
 
