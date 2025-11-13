@@ -35,7 +35,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
-                .country(request.getCountry())
+                .code(request.getCode())
                 .email(request.getEmail())
                 .role(Role.USER).build();
         userRepository.save(userModel);
