@@ -1,0 +1,31 @@
+package co.edu.univalle.Models;
+
+import jakarta.persistence.*;
+import lombok.Data;
+import java.time.LocalDate;
+
+@Data
+@Entity
+@Table(name = "prestamos")
+public class PrestamoModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
+    private String usuarioCode;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UserModel usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "libro_id", nullable = false)
+    private BookModel libro;
+
+    @Column(nullable = false)
+    private LocalDate fechaPrestamo;
+
+    private LocalDate fechaDevolucion;
+}

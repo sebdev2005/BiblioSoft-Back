@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
-    private static final String JWT_SECRET_KEY = "JDSVU4294K42KDNN4WPV9VJSOJVSD0VDSV9SD0VJSDV0DS9VDS9";
+    private static final String JWT_SECRET_KEY = "u8lH5YF1cj93hPjd8f8sGw4jnavbXQG4xH1Ds7Ka2GE=";
     public String getToken(UserDetails user){
         return getToken(new HashMap<>(), user);
     }

@@ -24,6 +24,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -33,6 +34,7 @@ public class AuthService {
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)
+                .role(user.getRole().name())
                 .message("Inicio de sesión exitoso.")
                 .build();
     }
@@ -88,6 +90,10 @@ public class AuthService {
 
         UserModel userModel = UserModel.builder()
                 .username(request.getUsername())
+
+                .code(request.getCode())
+                .password(passwordEncoder.encode(request.getPassword()))
+
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
@@ -102,7 +108,10 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(token)
+
+                .role(userModel.getRole().name())
                 .message("Usuario registrado exitosamente.")
+
                 .build();
     }
 }

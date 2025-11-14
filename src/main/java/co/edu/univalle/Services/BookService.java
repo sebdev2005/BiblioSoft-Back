@@ -36,4 +36,5 @@ public class BookService {
         return bookRepository.findByTituloContainingIgnoreCaseOrAutorContainingIgnoreCaseOrEditorialContainingIgnoreCase(
                 query, query, query);
     }
+
 }
