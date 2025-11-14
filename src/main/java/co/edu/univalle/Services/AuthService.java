@@ -32,6 +32,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request){
         UserModel userModel = UserModel.builder()
                 .username(request.getUsername())
+                .code(request.getCode())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())

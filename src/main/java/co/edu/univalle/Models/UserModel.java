@@ -26,6 +26,8 @@ public class UserModel implements UserDetails {
     private int id;
     @Column(nullable = false)
     private String username;
+    @Column(nullable = false, unique = true)
+    private String code;
     @Column(nullable = false)
     private String firstname;
     @Column(nullable = false)

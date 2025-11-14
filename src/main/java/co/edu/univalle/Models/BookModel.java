@@ -25,4 +25,6 @@ public class BookModel  {
     private String autor;
     @Column(name = "bk-anio" ,nullable = false)
     private int anio;
+    @Column(name = "bk-editorial" ,length = 70, nullable = false)
+    private String editorial;
 }
