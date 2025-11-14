@@ -29,6 +29,17 @@ public class JWTService {
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+    public String generatePasswordResetToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("purpose", "password_reset");
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
     public SecretKey getKey(){
         byte[] keyBytes = Decoders.BASE64.decode(JWT_SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -57,6 +68,7 @@ public class JWTService {
         final Claims claims = getClaims(token);
         return claimsResolver.apply(claims);
     }
+
     private Date getExpiration(String token){
         return getClaim(token ,Claims::getExpiration);
     }
