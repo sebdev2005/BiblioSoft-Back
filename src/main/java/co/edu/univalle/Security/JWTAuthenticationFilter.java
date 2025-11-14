@@ -32,7 +32,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         return path.equals("/auth/login")
                 || path.equals("/auth/register")
                 || path.equals("/error")
-                || path.startsWith("/api/user/buscar")
                 || path.startsWith("/api/book");
     }
 

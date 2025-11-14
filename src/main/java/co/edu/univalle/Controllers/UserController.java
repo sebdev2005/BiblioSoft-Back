@@ -8,6 +8,7 @@ import co.edu.univalle.Repositories.UserRepository;
 import co.edu.univalle.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -20,7 +21,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/buscar/{codigo}")
     public ResponseEntity<?> buscarUsuarioPorCodigo(@PathVariable String codigo) {
 
