@@ -33,7 +33,8 @@ public class BookService {
         return bookRepository.findAll();
     }
     public List<BookModel> searchBooks(String query) {
-        return bookRepository.findByTituloContainingIgnoreCaseOrAutorContainingIgnoreCase(query, query);
+        return bookRepository.findByTituloContainingIgnoreCaseOrAutorContainingIgnoreCaseOrEditorialContainingIgnoreCase(
+                query, query, query);
     }
 
 }

@@ -1,5 +1,6 @@
 package co.edu.univalle.Services;
 
+
 import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Repositories.PrestamoRepository;
 import co.edu.univalle.Repositories.UserRepository;
@@ -43,5 +44,25 @@ public class UserService {
 
     public List<PrestamoModel> obtenerPrestamosUsuario(String codigo) {
         return prestamoRepository.findByUsuarioCode(codigo);
+
+    public UserModel register(UserModel user) {
+        // Validaciones básicas
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("El nombre de usuario ya existe");
+        }
+
+        if (userRepository.findByCode(user.getCode()).isPresent()) {
+            throw new RuntimeException("El código ya está registrado");
+        }
+        // Encriptar contraseña antes de guardar
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        
+        if (user.getRole() == null) {
+            user.setRole(co.edu.univalle.Models.Role.USER);
+        }
+
+        return userRepository.save(user);
+
     }
 }
