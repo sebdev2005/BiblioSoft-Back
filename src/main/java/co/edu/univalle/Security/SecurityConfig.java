@@ -17,7 +17,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
@@ -34,22 +33,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-
-                        .requestMatchers("/auth/login", "/auth/register").permitAll()
-                        //.requestMatchers("/api/user/buscar/**").permitAll()
-                        //.requestMatchers("/api/user/**").permitAll()
-                        //.requestMatchers("/api/book/**").permitAll()
-                        .anyRequest().authenticated()   // <-- ÚNICO anyRequest
-                )
-                .sessionManagement(sessionManager ->
-                        sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                         // Endpoints públicos
-                        .requestMatchers("/auth/**", "/api/register").permitAll()
-                        // Todo lo demás requiere autenticación
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/login", "/auth/register", "/auth/**").permitAll()
+                        .requestMatchers("/api/user/register").permitAll()
+                        .requestMatchers("/api/book/**").permitAll()      // 👈 LIBERA LIBROS (para evitar 403)
+                        //.requestMatchers("/api/user/**").permitAll()   // Si quieres liberar usuarios
+                        .anyRequest().authenticated()  // Lo demás requiere token
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
 
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -60,7 +53,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173")); 
+        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -70,5 +63,4 @@ public class SecurityConfig {
 
         return source;
     }
-
 }

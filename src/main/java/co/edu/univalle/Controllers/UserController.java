@@ -6,6 +6,7 @@ import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
 import co.edu.univalle.Repositories.PrestamoRepository;
 import co.edu.univalle.Repositories.UserRepository;
+
 import co.edu.univalle.Services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -65,25 +66,31 @@ public class UserController {
     public ResponseEntity<?> obtenerPrestamos(@PathVariable String codigo) {
         return ResponseEntity.ok(userService.obtenerPrestamosUsuario(codigo));
 
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserModel user) {
         try {
             UserModel nuevo = userService.register(user);
             return ResponseEntity.ok(Map.of(
-                "message", "Registro exitoso",
-                "user", nuevo
-            ));
+
+                    "message", "Registro exitoso",
+                    "user", nuevo
+
         } catch (RuntimeException e) {
             // Errores esperados del UserService
             return ResponseEntity.badRequest().body(Map.of(
-                "message", e.getMessage(),
-                "errorType", e.getClass().getSimpleName()
+                    "message", e.getMessage(),
+                    "errorType", e.getClass().getSimpleName()
+
             ));
         } catch (Exception e) {
             // Otros errores inesperados
             return ResponseEntity.internalServerError().body(Map.of(
-                "message", "Error inesperado en el servidor: " + e.getMessage(),
-                "errorType", e.getClass().getSimpleName()
+
+                    "message", "Error inesperado en el servidor: " + e.getMessage(),
+                    "errorType", e.getClass().getSimpleName()
+
             ));
         }
     }
