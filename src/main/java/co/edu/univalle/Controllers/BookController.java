@@ -49,4 +49,10 @@ public class BookController {
         return "OK";
     }
 
+
+    }
+    @GetMapping("/search")
+    public List<BookModel> searchBooks(@RequestParam("query") String query) {
+        return bookService.searchBooks(query);
+    }
 }
