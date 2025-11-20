@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/loans")
 @RequiredArgsConstructor
@@ -66,4 +68,17 @@ public class LoanController {
     public ResponseEntity<?> getReturnedLoans() {
         return ResponseEntity.ok(loanService.getReturnedLoans());
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/requesteds")
+    public List<LoanResponseDTO> getRequestedLoans() {
+        return loanService.getRequestedLoans();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("approve/{id}")
+    public ResponseEntity<LoanResponseDTO> approveLoan(@PathVariable Long id) {
+        return ResponseEntity.ok(loanService.approveLoan(id));
+    }
+
 }

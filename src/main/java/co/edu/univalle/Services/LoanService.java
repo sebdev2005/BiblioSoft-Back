@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class LoanService {
                 .libro(book)
                 .fechaPrestamo(LocalDate.now())
                 .fechaDevolucion(LocalDate.now().plusDays(15))
-                .estado(Loan.PRESTADO)
+                .estado(Loan.SOLICITADO)
                 .build();
 
         book.setCantidadDisponible(book.getCantidadDisponible() - 1);
@@ -102,6 +103,28 @@ public class LoanService {
         return matToDTO(savedLoan);
 
         }
+
+    public List<LoanResponseDTO> getLoansByUserCode(String  userCode)  {
+        return matToDTOList(loanRepository.findByUsuarioCode(userCode));
+    }
+
+    public List<LoanResponseDTO> getRequestedLoans()  {
+        return matToDTOList(loanRepository.findByEstado(Loan.SOLICITADO));
+    }
+
+    public LoanResponseDTO approveLoan(Long loanId) {
+        LoanModel loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new ResourceNotFoundException("Préstamo no encontrado"));
+
+        if (loan.getEstado() != Loan.SOLICITADO) {
+            throw new BadRequestException("Solo se pueden aprobar préstamos en estado SOLICITADO");
+        }
+
+        loan.setEstado(Loan.PRESTADO);
+        LoanModel updatedLoan = loanRepository.save(loan);
+
+        return matToDTO(updatedLoan);
+    }
 
     public List<LoanResponseDTO> getAllLoans()  {
         return matToDTOList(loanRepository.findAll());
