@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController()
-@RequestMapping(path = "/api/book")
+@RequestMapping(path = "/book")
 public class BookController {
     private final BookService bookService;
 
@@ -50,9 +50,5 @@ public class BookController {
     }
 
 
-    }
-    @GetMapping("/search")
-    public List<BookModel> searchBooks(@RequestParam("query") String query) {
-        return bookService.searchBooks(query);
-    }
 }
+

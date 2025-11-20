@@ -2,10 +2,9 @@ package co.edu.univalle.Controllers;
 
 
 import co.edu.univalle.Models.BookModel;
-import co.edu.univalle.Models.PrestamoModel;
+import co.edu.univalle.Models.Loan;
+import co.edu.univalle.Models.LoanModel;
 import co.edu.univalle.Models.UserModel;
-import co.edu.univalle.Repositories.PrestamoRepository;
-import co.edu.univalle.Repositories.UserRepository;
 
 import co.edu.univalle.Services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,7 @@ public class UserController {
         }
 
         // 3. Obtener préstamos
-        List<PrestamoModel> prestamos = userService.obtenerPrestamosUsuario(codigo);
+        List<LoanModel> prestamos = userService.obtenerPrestamosUsuario(codigo);
 
         // 4. Construir respuesta
         Map<String, Object> respuesta = new HashMap<>();
@@ -53,8 +52,8 @@ public class UserController {
 
         // 5. Libros en poder
         List<BookModel> librosEnPoder = prestamos.stream()
-                .filter(p -> p.getFechaDevolucion() == null)
-                .map(PrestamoModel::getLibro)
+                .filter(p -> p.getEstado() == Loan.PRESTADO)
+                .map(LoanModel::getLibro)
                 .toList();
 
         respuesta.put("librosEnPoder", librosEnPoder);
@@ -75,7 +74,7 @@ public class UserController {
             return ResponseEntity.ok(Map.of(
 
                     "message", "Registro exitoso",
-                    "user", nuevo
+                    "user", nuevo) );
 
         } catch (RuntimeException e) {
             // Errores esperados del UserService

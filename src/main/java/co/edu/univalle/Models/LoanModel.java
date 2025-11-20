@@ -1,13 +1,17 @@
 package co.edu.univalle.Models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+
 import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "prestamos")
-public class PrestamoModel {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "loans")
+public class LoanModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +32,9 @@ public class PrestamoModel {
     private LocalDate fechaPrestamo;
 
     private LocalDate fechaDevolucion;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private Loan estado = Loan.PRESTADO;
 }

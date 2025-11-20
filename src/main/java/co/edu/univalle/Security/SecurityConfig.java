@@ -36,7 +36,8 @@ public class SecurityConfig {
                         // Endpoints públicos
                         .requestMatchers("/auth/login", "/auth/register", "/auth/**").permitAll()
                         .requestMatchers("/api/user/register").permitAll()
-                        .requestMatchers("/api/book/**").permitAll()      // 👈 LIBERA LIBROS (para evitar 403)
+                        .requestMatchers("/book/**").permitAll()      //
+                        //.requestMatchers("/loans/**").permitAll()// 👈 LIBERA LIBROS (para evitar 403)
                         //.requestMatchers("/api/user/**").permitAll()   // Si quieres liberar usuarios
                         .anyRequest().authenticated()  // Lo demás requiere token
                 )
