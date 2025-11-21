@@ -5,7 +5,7 @@ import co.edu.univalle.DTO.LoanResponseDTO;
 import co.edu.univalle.Exceptions.BadRequestException;
 import co.edu.univalle.Exceptions.ResourceNotFoundException;
 import co.edu.univalle.Models.BookModel;
-import co.edu.univalle.Models.Loan;
+import co.edu.univalle.Models.Estado;
 
 import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
@@ -26,19 +26,19 @@ public class PrestamoService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    private LoanResponseDTO matToDTO(PrestamoModel loanModel) {
+    private LoanResponseDTO matToDTO(PrestamoModel prestamoModel) {
 
-        String fullName = loanModel.getUsuario().getFirstname() + " " + loanModel.getUsuario().getLastname();
+        String fullName = prestamoModel.getUsuario().getFirstname() + " " + prestamoModel.getUsuario().getLastname();
 
         return LoanResponseDTO.builder()
-                .id(loanModel.getId())
+                .id(prestamoModel.getId())
                 .userFullName(fullName)
-                .userCode(loanModel.getUsuarioCode())
-                .bookId(loanModel.getLibro().getId())
-                .bookTitle(loanModel.getLibro().getTitulo())
-                .loanDate(loanModel.getFechaPrestamo())
-                .returnDate(loanModel.getFechaDevolucion())
-                .status(loanModel.getEstado())
+                .userCode(prestamoModel.getUsuarioCode())
+                .bookId(prestamoModel.getLibro().getId())
+                .bookTitle(prestamoModel.getLibro().getTitulo())
+                .loanDate(prestamoModel.getFechaPrestamo())
+                .returnDate(prestamoModel.getFechaDevolucion())
+                .status(prestamoModel.getEstado())
                 .build();
     }
 
@@ -52,7 +52,7 @@ public class PrestamoService {
     public LoanResponseDTO returnLoan(Long prestamoId) {
         PrestamoModel prestamo = loanRepository.findById(prestamoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Préstamo no encontrado"));
-        if (prestamo.getEstado() == Loan.DEVUELTO) {
+        if (prestamo.getEstado() == Estado.DEVUELTO) {
             throw new BadRequestException("El préstamo ya ha sido devuelto");
         }
 
@@ -60,7 +60,7 @@ public class PrestamoService {
         if (book == null) {
             throw new ResourceNotFoundException("Libro asociado al préstamo no encontrado");
         }
-        prestamo.setEstado(Loan.DEVUELTO);
+        prestamo.setEstado(Estado.DEVUELTO);
         prestamo.setFechaDevolucion(LocalDate.now());
         loanRepository.save(prestamo);
 
@@ -92,7 +92,7 @@ public class PrestamoService {
                 .libro(book)
                 .fechaPrestamo(LocalDate.now())
                 .fechaDevolucion(LocalDate.now().plusDays(15))
-                .estado(Loan.SOLICITADO)
+                .estado(Estado.SOLICITADO)
                 .build();
 
         book.setCantidadDisponible(book.getCantidadDisponible() - 1);
@@ -109,18 +109,18 @@ public class PrestamoService {
     }
 
     public List<LoanResponseDTO> getRequestedLoans()  {
-        return matToDTOList(loanRepository.findByEstado(Loan.SOLICITADO));
+        return matToDTOList(loanRepository.findByEstado(Estado.SOLICITADO));
     }
 
     public LoanResponseDTO approveLoan(Long loanId) {
         PrestamoModel loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new ResourceNotFoundException("Préstamo no encontrado"));
 
-        if (loan.getEstado() != Loan.SOLICITADO) {
+        if (loan.getEstado() != Estado.SOLICITADO) {
             throw new BadRequestException("Solo se pueden aprobar préstamos en estado SOLICITADO");
         }
 
-        loan.setEstado(Loan.PRESTADO);
+        loan.setEstado(Estado.PRESTADO);
         PrestamoModel updatedLoan = loanRepository.save(loan);
 
         return matToDTO(updatedLoan);
@@ -131,11 +131,11 @@ public class PrestamoService {
     }
 
     public List<LoanResponseDTO> getActiveLoans()  {
-        return matToDTOList(loanRepository.findByEstado(Loan.PRESTADO));
+        return matToDTOList(loanRepository.findByEstado(Estado.PRESTADO));
     }
 
     public List<LoanResponseDTO> getReturnedLoans()  {
-        return matToDTOList(loanRepository.findByEstado(Loan.DEVUELTO));
+        return matToDTOList(loanRepository.findByEstado(Estado.DEVUELTO));
     }
 
 }

@@ -2,7 +2,7 @@ package co.edu.univalle.Controllers;
 
 
 import co.edu.univalle.Models.BookModel;
-import co.edu.univalle.Models.Loan;
+import co.edu.univalle.Models.Estado;
 import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
 
@@ -52,7 +52,7 @@ public class UserController {
 
         // 5. Libros en poder
         List<BookModel> librosEnPoder = prestamos.stream()
-                .filter(p -> p.getEstado() == Loan.PRESTADO)
+                .filter(p -> p.getEstado() == Estado.PRESTADO)
                 .map(PrestamoModel::getLibro)
                 .toList();
 

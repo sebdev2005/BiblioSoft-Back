@@ -1,6 +1,6 @@
 package co.edu.univalle.Models;
 
-public enum Loan {
+public enum Estado {
     PRESTADO,
     DEVUELTO,
     SOLICITADO

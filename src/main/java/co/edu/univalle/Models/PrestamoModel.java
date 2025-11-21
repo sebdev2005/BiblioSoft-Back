@@ -36,5 +36,5 @@ public class PrestamoModel {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private Loan estado = Loan.PRESTADO;
+    private Estado estado = Estado.PRESTADO;
 }

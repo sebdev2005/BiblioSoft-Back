@@ -1,7 +1,6 @@
 package co.edu.univalle.DTO;
 
-import co.edu.univalle.Models.Loan;
-import co.edu.univalle.Models.UserModel;
+import co.edu.univalle.Models.Estado;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,5 @@ public class LoanResponseDTO {
     private String bookTitle;
     private LocalDate loanDate;
     private LocalDate returnDate;
-    private Loan status;
+    private Estado status;
 }

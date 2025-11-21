@@ -19,7 +19,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PrestamoRepository loanRepository;
+    private final PrestamoRepository prestamoRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Optional<UserModel> findByUsernames(String username) {
@@ -43,7 +43,7 @@ public class UserService {
     }
 
     public List<PrestamoModel> obtenerPrestamosUsuario(String codigo) {
-        return loanRepository.findByUsuarioCode(codigo);
+        return prestamoRepository.findByUsuarioCode(codigo);
 
     }
 
