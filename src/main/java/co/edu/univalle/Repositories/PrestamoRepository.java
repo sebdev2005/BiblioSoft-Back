@@ -12,4 +12,5 @@ public interface PrestamoRepository extends JpaRepository<PrestamoModel, Long> {
     List<PrestamoModel> findByUsuarioCode(String code);
     List<PrestamoModel> findByEstado(Estado estado);
     List<PrestamoModel> findByUsuarioId(Long userId);
+
 }

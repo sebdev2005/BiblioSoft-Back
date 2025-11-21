@@ -3,17 +3,17 @@ package co.edu.univalle.Services;
 
 import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Repositories.PrestamoRepository;
+import co.edu.univalle.Repositories.PrestamoRepository;
 import co.edu.univalle.Repositories.UserRepository;
 import co.edu.univalle.Models.UserModel;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {

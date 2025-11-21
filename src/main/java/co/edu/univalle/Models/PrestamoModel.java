@@ -1,10 +1,8 @@
 package co.edu.univalle.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 
 import java.time.LocalDate;
 
@@ -13,6 +11,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "prestamos")
 public class PrestamoModel {
 
@@ -45,4 +46,11 @@ public class PrestamoModel {
     // fechaDevolucion ya permite null, está correcto
     @Column
     private LocalDate fechaDevolucion;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private Estado estado = Estado.PRESTADO;
 }
+

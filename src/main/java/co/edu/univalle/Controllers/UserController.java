@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.univalle.Models.BookModel;
+import co.edu.univalle.Models.Estado;
 import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
+
 import co.edu.univalle.Services.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -59,7 +61,7 @@ public class UserController {
 
         // 5. Libros en poder
         List<BookModel> librosEnPoder = prestamos.stream()
-                .filter(p -> p.getFechaDevolucion() == null)
+                .filter(p -> p.getEstado() == Estado.PRESTADO)
                 .map(PrestamoModel::getLibro)
                 .toList();
 
@@ -81,7 +83,7 @@ public class UserController {
             return ResponseEntity.ok(Map.of(
 
                     "message", "Registro exitoso",
-                    "user", nuevo
+                    "user", nuevo) );
 
             ));
 

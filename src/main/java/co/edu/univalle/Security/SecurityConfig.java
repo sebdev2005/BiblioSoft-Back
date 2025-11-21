@@ -35,10 +35,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/user/register").permitAll()
+                        .requestMatchers("/book/**").permitAll()      //
+                        //.requestMatchers("/loans/**").permitAll()// 👈 LIBERA LIBROS (para evitar 403)
+                        //.requestMatchers("/api/user/**").permitAll()   // Si quieres liberar usuarios
+                         // Lo demás requiere token
+
                         .requestMatchers("/api/book/**").permitAll()
                         // PRESTAMOS EXIGEN TOKEN
                         .requestMatchers("/api/prestamo/**").authenticated()
                         .anyRequest().authenticated()
+
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
