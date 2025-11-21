@@ -1,7 +1,6 @@
 package co.edu.univalle.Models;
 
 public enum Estado {
-    PRESTADO,
-    DEVUELTO,
-    SOLICITADO
+    SOLICITADO,PRESTADO,DEVUELTO,RECHAZADO
+
 }

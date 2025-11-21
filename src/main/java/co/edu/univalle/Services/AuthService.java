@@ -38,6 +38,8 @@ public class AuthService {
                 .token(token)
                 .role(user.getRole().name())
                 .message("Inicio de sesión exitoso.")
+                .username(user.getUsername())
+                .user(user)
                 .build();
     }
 
