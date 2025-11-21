@@ -6,27 +6,27 @@ import co.edu.univalle.Exceptions.BadRequestException;
 import co.edu.univalle.Exceptions.ResourceNotFoundException;
 import co.edu.univalle.Models.BookModel;
 import co.edu.univalle.Models.Loan;
-import co.edu.univalle.Models.LoanModel;
+
+import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
 import co.edu.univalle.Repositories.BookRepository;
-import co.edu.univalle.Repositories.LoanRepository;
+import co.edu.univalle.Repositories.PrestamoRepository;
 import co.edu.univalle.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LoanService {
-    private final LoanRepository loanRepository;
+public class PrestamoService {
+    private final PrestamoRepository loanRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    private LoanResponseDTO matToDTO(LoanModel loanModel) {
+    private LoanResponseDTO matToDTO(PrestamoModel loanModel) {
 
         String fullName = loanModel.getUsuario().getFirstname() + " " + loanModel.getUsuario().getLastname();
 
@@ -42,7 +42,7 @@ public class LoanService {
                 .build();
     }
 
-    private List<LoanResponseDTO> matToDTOList(List<LoanModel> loanModels) {
+    private List<LoanResponseDTO> matToDTOList(List<PrestamoModel> loanModels) {
         return loanModels.stream()
                 .map(this::matToDTO)
                 .toList();
@@ -50,7 +50,7 @@ public class LoanService {
 
     @Transactional
     public LoanResponseDTO returnLoan(Long prestamoId) {
-        LoanModel prestamo = loanRepository.findById(prestamoId)
+        PrestamoModel prestamo = loanRepository.findById(prestamoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Préstamo no encontrado"));
         if (prestamo.getEstado() == Loan.DEVUELTO) {
             throw new BadRequestException("El préstamo ya ha sido devuelto");
@@ -64,7 +64,7 @@ public class LoanService {
         prestamo.setFechaDevolucion(LocalDate.now());
         loanRepository.save(prestamo);
 
-        Integer disponible = book.getCantidadDisponible() == null ? 0 : book.getCantidadDisponible();
+        int disponible = book.getCantidadDisponible() == null ? 0 : book.getCantidadDisponible();
         disponible = disponible + 1;
 
         if (book.getCantidadTotal() != null && disponible > book.getCantidadTotal() ) {
@@ -86,7 +86,7 @@ public class LoanService {
             throw new BadRequestException("No hay copias disponibles del libro solicitado");
         }
 
-        LoanModel loan = LoanModel.builder()
+        PrestamoModel loan = PrestamoModel.builder()
                 .usuario(user)
                 .usuarioCode(user.getCode())
                 .libro(book)
@@ -98,7 +98,7 @@ public class LoanService {
         book.setCantidadDisponible(book.getCantidadDisponible() - 1);
         bookRepository.save(book);
 
-        LoanModel savedLoan = loanRepository.save(loan);
+        PrestamoModel savedLoan = loanRepository.save(loan);
 
         return matToDTO(savedLoan);
 
@@ -113,7 +113,7 @@ public class LoanService {
     }
 
     public LoanResponseDTO approveLoan(Long loanId) {
-        LoanModel loan = loanRepository.findById(loanId)
+        PrestamoModel loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new ResourceNotFoundException("Préstamo no encontrado"));
 
         if (loan.getEstado() != Loan.SOLICITADO) {
@@ -121,7 +121,7 @@ public class LoanService {
         }
 
         loan.setEstado(Loan.PRESTADO);
-        LoanModel updatedLoan = loanRepository.save(loan);
+        PrestamoModel updatedLoan = loanRepository.save(loan);
 
         return matToDTO(updatedLoan);
     }

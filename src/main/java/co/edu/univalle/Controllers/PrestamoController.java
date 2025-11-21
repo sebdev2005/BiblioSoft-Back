@@ -6,10 +6,7 @@ import co.edu.univalle.Auth.MessageResponse;
 import co.edu.univalle.DTO.LoanResponseDTO;
 import co.edu.univalle.Exceptions.BadRequestException;
 import co.edu.univalle.Exceptions.ResourceNotFoundException;
-import co.edu.univalle.Models.LoanModel;
-import co.edu.univalle.Repositories.LoanRepository;
-import co.edu.univalle.Services.LoanService;
-import jakarta.persistence.PostRemove;
+import co.edu.univalle.Services.PrestamoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/loans")
 @RequiredArgsConstructor
-public class LoanController {
-    private final LoanService loanService;
+public class PrestamoController {
+    private final PrestamoService loanService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")

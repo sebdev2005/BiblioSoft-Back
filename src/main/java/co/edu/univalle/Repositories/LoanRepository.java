@@ -1,14 +1,14 @@
 package co.edu.univalle.Repositories;
 
 import co.edu.univalle.Models.Loan;
-import co.edu.univalle.Models.LoanModel;
+import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LoanRepository extends JpaRepository<LoanModel, Long> {
-    List<LoanModel> findByUsuario(UserModel usuario);
-    List<LoanModel> findByUsuarioCode(String code);
-    List<LoanModel> findByEstado(Loan estado);
+public interface PrestamoRepository extends JpaRepository<PrestamoModel, Long> {
+    List<PrestamoModel> findByUsuario(UserModel usuario);
+    List<PrestamoModel> findByUsuarioCode(String code);
+    List<PrestamoModel> findByEstado(Loan estado);
 }

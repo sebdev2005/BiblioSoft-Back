@@ -1,8 +1,9 @@
 package co.edu.univalle.Services;
 
 
-import co.edu.univalle.Models.LoanModel;
-import co.edu.univalle.Repositories.LoanRepository;
+import co.edu.univalle.Models.PrestamoModel;
+import co.edu.univalle.Repositories.PrestamoRepository;
+import co.edu.univalle.Repositories.PrestamoRepository;
 import co.edu.univalle.Repositories.UserRepository;
 import co.edu.univalle.Models.UserModel;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final LoanRepository loanRepository;
+    private final PrestamoRepository loanRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Optional<UserModel> findByUsernames(String username) {
@@ -41,7 +42,7 @@ public class UserService {
         return userRepository.findByCode(code).orElse(null);
     }
 
-    public List<LoanModel> obtenerPrestamosUsuario(String codigo) {
+    public List<PrestamoModel> obtenerPrestamosUsuario(String codigo) {
         return loanRepository.findByUsuarioCode(codigo);
 
     }

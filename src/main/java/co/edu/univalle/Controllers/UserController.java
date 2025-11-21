@@ -3,7 +3,7 @@ package co.edu.univalle.Controllers;
 
 import co.edu.univalle.Models.BookModel;
 import co.edu.univalle.Models.Loan;
-import co.edu.univalle.Models.LoanModel;
+import co.edu.univalle.Models.PrestamoModel;
 import co.edu.univalle.Models.UserModel;
 
 import co.edu.univalle.Services.UserService;
@@ -42,7 +42,7 @@ public class UserController {
         }
 
         // 3. Obtener préstamos
-        List<LoanModel> prestamos = userService.obtenerPrestamosUsuario(codigo);
+        List<PrestamoModel> prestamos = userService.obtenerPrestamosUsuario(codigo);
 
         // 4. Construir respuesta
         Map<String, Object> respuesta = new HashMap<>();
@@ -53,7 +53,7 @@ public class UserController {
         // 5. Libros en poder
         List<BookModel> librosEnPoder = prestamos.stream()
                 .filter(p -> p.getEstado() == Loan.PRESTADO)
-                .map(LoanModel::getLibro)
+                .map(PrestamoModel::getLibro)
                 .toList();
 
         respuesta.put("librosEnPoder", librosEnPoder);
