@@ -28,40 +28,76 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-
-        return path.equals("/auth/login")
-                || path.equals("/auth/register")
-                || path.equals("/error")
-                || path.startsWith("/api/book");
+        return path.startsWith("/auth")
+                || path.startsWith("/api/book")
+                || path.equals("/error");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        System.out.println("========== JWT FILTER ==========");
+        System.out.println("🔍 Path: " + request.getServletPath());
+        System.out.println("🔍 Method: " + request.getMethod());
+
         final String token = getTokenFromRequest(request);
 
+        System.out.println("🔍 Token recibido: " + (token != null ? "SÍ" : "NO"));
+
         if (token != null) {
-            String username = jwtService.getUsernameFromToken(token);
+            System.out.println("🔍 Token (primeros 20 chars): " + token.substring(0, Math.min(20, token.length())) + "...");
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                String username = jwtService.getUsernameFromToken(token);
+                System.out.println("✅ Username extraído del token: " + username);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    System.out.println("🔍 Cargando UserDetails para: " + username);
 
-                if (jwtService.isTokenValid(token, userDetails)) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    System.out.println("✅ UserDetails cargado: " + userDetails.getUsername());
 
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails,
-                                    null,
-                                    userDetails.getAuthorities()
-                            );
+                    boolean isValid = jwtService.isTokenValid(token, userDetails);
+                    System.out.println("🔍 ¿Token válido?: " + isValid);
 
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    if (isValid) {
+                        System.out.println("✅ TOKEN VÁLIDO - Autenticando usuario");
+
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(
+                                        userDetails,
+                                        null,
+                                        userDetails.getAuthorities()
+                                );
+
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                        System.out.println("✅ Usuario autenticado correctamente");
+                    } else {
+                        System.out.println("❌ TOKEN INVÁLIDO - Acceso denegado");
+                    }
+                } else {
+                    if (username == null) {
+                        System.out.println("❌ No se pudo extraer username del token");
+                    }
+                    if (SecurityContextHolder.getContext().getAuthentication() != null) {
+                        System.out.println("⚠️ Usuario ya autenticado");
+                    }
                 }
+            } catch (Exception e) {
+                System.out.println("❌ ERROR procesando token: " + e.getClass().getSimpleName());
+                System.out.println("❌ Mensaje: " + e.getMessage());
+                e.printStackTrace();
             }
+        } else {
+            System.out.println("❌ No se encontró token en el header Authorization");
+            String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            System.out.println("🔍 Header Authorization completo: " + authHeader);
         }
+
+        System.out.println("================================\n");
 
         filterChain.doFilter(request, response);
     }

@@ -28,16 +28,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/api/user/register").permitAll()
-                        .requestMatchers("/api/book/**").permitAll()      // 👈 LIBERA LIBROS (para evitar 403)
-                        //.requestMatchers("/api/user/**").permitAll()   // Si quieres liberar usuarios
-                        .anyRequest().authenticated()  // Lo demás requiere token
+                        .requestMatchers("/api/book/**").permitAll()
+                        // PRESTAMOS EXIGEN TOKEN
+                        .requestMatchers("/api/prestamo/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -53,7 +54,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("*")); // 🔥 CORREGIDO
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -27,4 +27,8 @@ public class BookModel  {
     private int anio;
     @Column(name = "bk-editorial" ,length = 70, nullable = false)
     private String editorial;
+    @Column(name = "bk_cantidad_total", nullable = false)
+    private int cantidadTotal;
+    @Column(name = "bk_cantidad_disponible", nullable = false)
+    private int cantidadDisponible;
 }
