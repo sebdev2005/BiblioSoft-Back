@@ -32,5 +32,11 @@ public class BookModel  {
     private String editorial;
 
     @Column(name = "bk-estado", length = 20, nullable = false)
-    private String estado = "DISPONIBLE";  // <--- agregado
+    private String estado = "DISPONIBLE";  
+
+    @Column(name = "bk_cantidad_total", nullable = false)
+    private int cantidadTotal;
+    @Column(name = "bk_cantidad_disponible", nullable = false)
+    private int cantidadDisponible;
+
 }

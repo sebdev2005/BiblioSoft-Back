@@ -1,5 +1,6 @@
 package co.edu.univalle.Auth;
 
+import co.edu.univalle.Models.UserModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class AuthResponse {
     private String role;
     private String token;
+    private String username;
     private String message;
-
+    private UserModel user;
 }
