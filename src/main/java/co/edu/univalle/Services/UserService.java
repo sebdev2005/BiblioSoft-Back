@@ -44,7 +44,9 @@ public class UserService {
 
     public List<PrestamoModel> obtenerPrestamosUsuario(String codigo) {
         return prestamoRepository.findByUsuarioCode(codigo);
+
     }
+
     public UserModel register(UserModel user) {
         // Validaciones básicas
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
@@ -56,7 +58,6 @@ public class UserService {
         }
         // Encriptar contraseña antes de guardar
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
 
         if (user.getRole() == null) {
             user.setRole(co.edu.univalle.Models.Role.USER);
