@@ -6,9 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Data
 @Entity
 @Builder
@@ -33,8 +31,9 @@ public class PrestamoModel {
     private BookModel libro;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)  // Especificar longitud suficiente para el enum
-    private Estado estado;
+    @Column(length = 20)
+    @Builder.Default// Especificar longitud suficiente para el enum
+    private Estado estado = Estado.PRESTADO;
 
     @Column(nullable = false)
     private LocalDate fechaSolicitud;
@@ -48,9 +47,7 @@ public class PrestamoModel {
     private LocalDate fechaDevolucion;
 
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    @Builder.Default
-    private Estado estado = Estado.PRESTADO;
+
+
 }
 

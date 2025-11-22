@@ -1,6 +1,5 @@
 package co.edu.univalle.Controllers;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,35 +30,27 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/buscar/{codigo}")
     public ResponseEntity<?> buscarUsuarioPorCodigo(@PathVariable String codigo) {
 
-        // 1. Validación del código
         if (codigo.length() > 20 || !codigo.matches("\\d+")) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("codigo invalido");
+            return ResponseEntity.badRequest().body("codigo invalido");
         }
 
-        // 2. Buscar usuario
         UserModel usuario = userService.buscarPorCodigo(codigo);
         if (usuario == null) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("usuario no encontrado");
         }
 
-        // 3. Obtener préstamos
         List<PrestamoModel> prestamos = userService.obtenerPrestamosUsuario(codigo);
 
-        // 4. Construir respuesta
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("codigo", usuario.getCode());
         respuesta.put("nombre", usuario.getFirstname() + " " + usuario.getLastname());
         respuesta.put("prestamosRealizados", prestamos);
 
-        // 5. Libros en poder
         List<BookModel> librosEnPoder = prestamos.stream()
                 .filter(p -> p.getEstado() == Estado.PRESTADO)
                 .map(PrestamoModel::getLibro)
@@ -73,34 +64,27 @@ public class UserController {
     @GetMapping("/{codigo}/prestamos")
     public ResponseEntity<?> obtenerPrestamos(@PathVariable String codigo) {
         return ResponseEntity.ok(userService.obtenerPrestamosUsuario(codigo));
-
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserModel user) {
         try {
             UserModel nuevo = userService.register(user);
+
             return ResponseEntity.ok(Map.of(
-
                     "message", "Registro exitoso",
-                    "user", nuevo) );
-
+                    "user", nuevo
             ));
 
         } catch (RuntimeException e) {
-            // Errores esperados del UserService
             return ResponseEntity.badRequest().body(Map.of(
                     "message", e.getMessage(),
                     "errorType", e.getClass().getSimpleName()
-
             ));
         } catch (Exception e) {
-            // Otros errores inesperados
             return ResponseEntity.internalServerError().body(Map.of(
-
                     "message", "Error inesperado en el servidor: " + e.getMessage(),
                     "errorType", e.getClass().getSimpleName()
-
             ));
         }
     }
@@ -108,6 +92,5 @@ public class UserController {
     @PostMapping("/example")
     public String welcome() {
         return "Welcome";
-
     }
 }
