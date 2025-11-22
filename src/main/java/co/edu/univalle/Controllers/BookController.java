@@ -19,7 +19,7 @@ import co.edu.univalle.Models.BookModel;
 import co.edu.univalle.Services.BookService;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController()
-@RequestMapping(path = "/book")
+@RequestMapping(path = "/api/book")
 public class BookController {
     private final BookService bookService;
 

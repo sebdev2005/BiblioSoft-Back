@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 public class BookModel  {
 
     @Id
-Camilo-Olave
-
     @Column(name = "bk-id",nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,10 +32,10 @@ Camilo-Olave
     private String editorial;
 
     @Column (name = "bk-cantidad_total" ,nullable = false)
-    private Integer cantidadTotal;
+    private Integer cantidadTotal = 0;
   
     @Column (name = "bk-cantidad_disponible" ,nullable = false)
-    private Integer cantidadDisponible;
+    private Integer cantidadDisponible = 0;
 
     @Column(name = "bk-estado", length = 20, nullable = false)
     private String estado = "DISPONIBLE";  
