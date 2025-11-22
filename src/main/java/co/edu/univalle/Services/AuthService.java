@@ -38,6 +38,8 @@ public class AuthService {
                 .token(token)
                 .role(user.getRole().name())
                 .message("Inicio de sesión exitoso.")
+                .username(user.getUsername())
+                .user(user)
                 .build();
     }
 
@@ -80,11 +82,12 @@ public class AuthService {
                     .build();
         }
 
+        boolean usernameExists = userRepository.findByUsername(request.getUsername()).isPresent();
         boolean codeExists = userRepository.findByUsername(request.getCode()).isPresent();
         boolean emailExists = userRepository.findAll().stream()
                 .anyMatch(u -> u.getEmail().equalsIgnoreCase(request.getEmail()));
 
-        if (codeExists || emailExists) {
+        if (codeExists || emailExists || usernameExists) {
             return AuthResponse.builder()
                     .message("El código o el email ya se encuentran registrados, por favor inicie sesión o verifique.")
                     .build();
