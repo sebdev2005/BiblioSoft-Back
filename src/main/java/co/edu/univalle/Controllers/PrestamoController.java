@@ -34,6 +34,12 @@ public class PrestamoController {
 
         return ResponseEntity.ok(prestamo);
     }
+    @PutMapping("/renovar/{prestamoId}")
+    public ResponseEntity<?> renovarPrestamo(@PathVariable Long prestamoId, Principal principal){
+        String username = principal.getName();
+        PrestamoModel renovado = prestamoService.renovarPrestamo(prestamoId,username);
+        return ResponseEntity.ok(renovado);
+    }
 
     @PutMapping("/aprobar/{prestamoId}")
     public ResponseEntity<?> aprobarPrestamo(@PathVariable Long prestamoId) {

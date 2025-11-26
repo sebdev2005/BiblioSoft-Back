@@ -35,8 +35,13 @@ public class PrestamoModel {
     @Builder.Default// Especificar longitud suficiente para el enum
     private Estado estado = Estado.PRESTADO;
 
+    @Column
+    @Builder.Default
+    private Integer renovaciones = 0;
+
     @Column(nullable = false)
     private LocalDate fechaSolicitud;
+
 
     // CORRECCIÓN: fechaPrestamo puede ser null cuando el estado es SOLICITADO
     @Column(nullable = true)  // Cambiado de false a true
@@ -45,6 +50,8 @@ public class PrestamoModel {
     // fechaDevolucion ya permite null, está correcto
     @Column
     private LocalDate fechaDevolucion;
+
+
 
 
 

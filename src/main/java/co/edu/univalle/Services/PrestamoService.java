@@ -132,12 +132,35 @@ public class PrestamoService {
                 .usuario(user)
                 .libro(book)
                 .estado(Estado.SOLICITADO)
+                .renovaciones(0)
                 .fechaSolicitud(LocalDate.now())
                 .fechaPrestamo(LocalDate.now())
                 .fechaDevolucion(LocalDate.now().plusDays(15))
                 .build();
 
         return prestamoRepository.save(prestamo);
+    }
+    public PrestamoModel renovarPrestamo(Long prestamoId, String username){
+        PrestamoModel prestamo = prestamoRepository.findById(prestamoId)
+                .orElseThrow(() -> new RuntimeException("Prestamo no encontrado"));
+
+        UserModel user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("No se pudo encontrar el usuario"));
+        if (!prestamo.getUsuario().getId().equals(user.getId())) {
+            throw new RuntimeException("No puedes renovar un préstamo que no es tuyo");
+        }
+
+        if(prestamo.getEstado() != Estado.PRESTADO){
+            throw new RuntimeException("El libro no ha sido prestado");
+        }
+        if(prestamo.getRenovaciones() >= 1 ){
+            throw new RuntimeException("Limite de renovaciones alcanzado");
+        }
+
+        prestamo.setRenovaciones(prestamo.getRenovaciones() + 1);
+        prestamo.setFechaDevolucion(prestamo.getFechaDevolucion().plusDays(15));
+        return prestamoRepository.save(prestamo);
+
     }
 
 
@@ -239,9 +262,6 @@ public class PrestamoService {
 
         prestamoRepository.save(prestamo);
     }
-
-
-    // ------------------ CONSULTAS ------------------
 
     public List<PrestamoModel> obtenerPrestamosPorUsuario(Long userId) {
         return prestamoRepository.findByUsuarioId(userId);
