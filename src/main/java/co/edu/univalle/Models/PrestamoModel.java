@@ -43,10 +43,11 @@ public class PrestamoModel {
     private LocalDate fechaPrestamo;
 
     // fechaDevolucion ya permite null, está correcto
-    @Column
+    @Column(nullable = true)
     private LocalDate fechaDevolucion;
 
-
+    @Column(nullable = true)
+    private LocalDate fechaEntrega;
 
 
 }

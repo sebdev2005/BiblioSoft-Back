@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/book/**").permitAll()
                         // PRESTAMOS EXIGEN TOKEN
                         .requestMatchers("/api/prestamo/**").authenticated()
+                        .requestMatchers("/fines/**").permitAll()
                         .anyRequest().authenticated()
 
                 )
