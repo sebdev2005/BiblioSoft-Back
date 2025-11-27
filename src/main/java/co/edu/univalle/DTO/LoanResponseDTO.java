@@ -19,4 +19,5 @@ public class LoanResponseDTO {
     private LocalDate loanDate;
     private LocalDate returnDate;
     private Estado status;
+    private Integer renovaciones;
 }
