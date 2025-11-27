@@ -1,14 +1,13 @@
 package co.edu.univalle.Services;
 
 import co.edu.univalle.Auth.LoanRequest;
+import co.edu.univalle.DTO.FineResponseDTO;
 import co.edu.univalle.DTO.LoanResponseDTO;
 import co.edu.univalle.Exceptions.BadRequestException;
 import co.edu.univalle.Exceptions.ResourceNotFoundException;
-import co.edu.univalle.Models.BookModel;
-import co.edu.univalle.Models.Estado;
-import co.edu.univalle.Models.PrestamoModel;
-import co.edu.univalle.Models.UserModel;
+import co.edu.univalle.Models.*;
 import co.edu.univalle.Repositories.BookRepository;
+import co.edu.univalle.Repositories.FineRepository;
 import co.edu.univalle.Repositories.PrestamoRepository;
 import co.edu.univalle.Repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,8 @@ public class PrestamoService {
     private final PrestamoRepository prestamoRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final FineRepository fineRepository;
+    private final FineService fineService;
 
     // ------------------ DTO HELPERS ------------------
 
@@ -41,6 +43,7 @@ public class PrestamoService {
                 .loanDate(prestamoModel.getFechaPrestamo())
                 .returnDate(prestamoModel.getFechaDevolucion())
                 .status(prestamoModel.getEstado())
+                .deliveryDate(prestamoModel.getFechaEntrega())
                 .build();
     }
 
@@ -69,8 +72,10 @@ public class PrestamoService {
         }
 
         prestamo.setEstado(Estado.DEVUELTO);
-        prestamo.setFechaDevolucion(LocalDate.now());
+        prestamo.setFechaEntrega(LocalDate.now());
         prestamoRepository.save(prestamo);
+
+        fineService.createFine(prestamoId);
 
         Integer disponible = (book.getCantidadDisponible() == null) ? 0 : book.getCantidadDisponible();
         disponible++;
@@ -125,6 +130,13 @@ public class PrestamoService {
 
         if (book.getCantidadDisponible() <= 0) {
             throw new RuntimeException("No hay libros disponibles");
+        }
+
+        List<FineModel> pendingFines = fineRepository.findByPrestamo_Usuario_IdAndStatus(userId, FineStatus.PENDING);
+
+
+        if (!pendingFines.isEmpty()) {
+            throw new BadRequestException("No puede solicitar un préstamo con multas pendientes.");
         }
 
         PrestamoModel prestamo = PrestamoModel.builder()
@@ -269,5 +281,9 @@ public class PrestamoService {
 
     public List<PrestamoModel> obtenerTodosLosPrestamos() {
         return prestamoRepository.findAll();
+    }
+
+    public List<FineResponseDTO> getUserFines(String userCode) {
+        return fineService.getFinesByUserCode(userCode);
     }
 }
