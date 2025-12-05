@@ -217,6 +217,7 @@ public class PrestamoService {
         BookModel book = loan.getLibro();
         book.setCantidadDisponible(book.getCantidadDisponible() - 1);
         loan.setEstado(Estado.PRESTADO);
+        loan.setFechaDevolucion(LocalDate.now().plusDays(15));
         PrestamoModel updatedLoan = prestamoRepository.save(loan);
 
         return matToDTO(updatedLoan);
