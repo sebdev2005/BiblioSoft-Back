@@ -18,5 +18,7 @@ public class LoanResponseDTO {
     private String bookTitle;
     private LocalDate loanDate;
     private LocalDate returnDate;
+    private LocalDate deliveryDate;
     private Estado status;
+    private Integer renovaciones;
 }

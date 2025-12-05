@@ -38,8 +38,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         System.out.println("========== JWT FILTER ==========");
-        System.out.println("🔍 Path: " + request.getServletPath());
-        System.out.println("🔍 Method: " + request.getMethod());
+        System.out.println("Path: " + request.getServletPath());
+        System.out.println("Method: " + request.getMethod());
 
         final String token = getTokenFromRequest(request);
 
