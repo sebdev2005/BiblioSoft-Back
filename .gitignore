@@ -58,7 +58,8 @@ out/
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
->>>>>>> 70645da803bb6169b7a9c0fb1b01f266e12fb39c
+
+# Ignorar application.properties (contiene datos sensibles)
+src/main/resources/application.properties

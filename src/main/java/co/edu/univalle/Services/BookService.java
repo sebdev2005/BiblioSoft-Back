@@ -14,24 +14,27 @@ public class BookService {
     private final BookRepository bookRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository){
+    public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    public BookModel createBook(BookModel bookModel){
+    public BookModel createBook(BookModel bookModel) {
         return bookRepository.save(bookModel);
     }
 
-    public BookModel updateBook(BookModel bookModel){
+    public BookModel updateBook(BookModel bookModel) {
+
         return bookRepository.save(bookModel);
     }
 
-    public void deleteBook(Long id){
+    public void deleteBook(Long id) {
         bookRepository.deleteById(id);
     }
-    public List<BookModel> findAll(){
+
+    public List<BookModel> findAll() {
         return bookRepository.findAll();
     }
+
     public List<BookModel> searchBooks(String query) {
         return bookRepository.findByTituloContainingIgnoreCaseOrAutorContainingIgnoreCaseOrEditorialContainingIgnoreCase(
                 query, query, query);
