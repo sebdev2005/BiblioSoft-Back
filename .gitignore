@@ -61,5 +61,4 @@ out/
 hs_err_pid*
 replay_pid*
 
-# Ignorar application.properties (contiene datos sensibles)
-src/main/resources/application.properties
+
